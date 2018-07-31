@@ -14,13 +14,21 @@ export class Image extends React.Component {
     }
 
     showImage = (event) => {
+        let overlay = document.querySelector('.overlay')
+            overlay.style.display = 'block'
+            overlay.addEventListener('click', this.hideImage)
+        document.getElementById(event.target.id).classList.add('active')
+
+    }
+
+    hideImage = () => {
         let activeItem = document.querySelector('.active')
         if (activeItem) {
             activeItem.classList.remove('active')
         }
-        document.getElementById(event.target.id).classList.add('active')
-        document.querySelector('.overlay').style.display = "block"
+        document.querySelector('.overlay').style.display = 'none'
     }
+
     render() {
         return (
             <div>
