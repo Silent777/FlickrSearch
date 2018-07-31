@@ -32,11 +32,12 @@ export class ImageSearch extends React.Component {
 
   getImages (query) {
     imageSearchGet(query)
-    .then(response =>
+    .then(response =>{
+        console.log(response)
       this.setState({
         query: query,
         photos: response.data.photos.photo,
-      })
+      })}
     )
     .catch(error => {
       console.log("Error fetching and parsing data", error);
