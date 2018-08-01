@@ -41,6 +41,6 @@ export class Image extends React.Component {
                     id={this.props.id}
                 />
             </div>
-      );
+        );
     }
 }

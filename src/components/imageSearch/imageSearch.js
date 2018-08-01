@@ -15,6 +15,22 @@ const inputStyle = {
     outline: 'none'
 }
 
+const showMoreButtonStyle = {
+    display: 'block',
+    padding: '15px 25px',
+    fontSize: '24px',
+    cursor: 'pointer',
+    textAlign: 'center',
+    textDecoration: 'none',
+    outline: 'none',
+    color: '#fff',
+    backgroundColor: '#4CAF50',
+    border: 'none',
+    borderRadius: '15px',
+    boxShadow: '0 9px #999',
+    margin: '30px auto'
+}
+
 const imageContanerStyle = {
     display: 'flex',
     justifyContent: 'space-between',
@@ -26,22 +42,25 @@ export class ImageSearch extends React.Component {
     super(props);
     this.state = {
         photos: [],
-        query: ''
+        query: '',
+        page: 1
     };
   }
 
   getImages (query) {
     imageSearchGet(query)
-    .then(response =>
+    .then(response =>{
+        console.log(response)
       this.setState({
         query: query,
         photos: response.data.photos.photo,
-      })
+        page: response.data.photos.page
+      })}
     )
     .catch(error => {
       console.log("Error fetching and parsing data", error);
     });
-  }
+  } 
 
   search = (event) => {
           if(event.keyCode === 13) {
@@ -50,11 +69,31 @@ export class ImageSearch extends React.Component {
                   this.setState({query: ''})
               }
           if(!event.target.value) {
-            this.setState({photos: []})
+            this.setState({photos: [], query: ''})
           }
   }
 
+  handleShowMore = () => {
+      imageSearchGet(this.state.query, this.state.page + 1)
+        .then(response => {
+            this.setState({
+                photos: this.state.photos.concat(response.data.photos.photo),
+                page: this.state.page + 1
+            })
+        })
+  }
+
+
   render() {
+      let showMoreButton
+      if(this.state.query) {
+            showMoreButton = <button
+                onClick={this.handleShowMore} 
+                style={showMoreButtonStyle} 
+                className="showMoreButton" >
+                    Show more
+            </button>
+      }
         return (
           <div>
             <div className='overlay'></div>
@@ -69,6 +108,7 @@ export class ImageSearch extends React.Component {
                         title={photo.title} />
                 )}
              </div>
+                {showMoreButton}
           </div>
         );
   }
