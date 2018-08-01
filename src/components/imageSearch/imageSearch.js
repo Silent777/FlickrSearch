@@ -43,18 +43,19 @@ export class ImageSearch extends React.Component {
     this.state = {
         photos: [],
         query: '',
-        page: 1
+        page: 1,
+        pages: 0
     };
   }
 
   getImages (query) {
     imageSearchGet(query)
     .then(response =>{
-        console.log(response)
       this.setState({
         query: query,
         photos: response.data.photos.photo,
-        page: response.data.photos.page
+        page: response.data.photos.page,
+        pages: response.data.photos.pages
       })}
     )
     .catch(error => {
@@ -69,7 +70,10 @@ export class ImageSearch extends React.Component {
                   this.setState({query: ''})
               }
           if(!event.target.value) {
-            this.setState({photos: [], query: ''})
+            this.setState({
+                photos: [],
+                query: ''
+            })
           }
   }
 
@@ -78,7 +82,8 @@ export class ImageSearch extends React.Component {
         .then(response => {
             this.setState({
                 photos: this.state.photos.concat(response.data.photos.photo),
-                page: this.state.page + 1
+                page: this.state.page + 1,
+                pages: response.data.photos.pages
             })
         })
   }
@@ -86,10 +91,10 @@ export class ImageSearch extends React.Component {
 
   render() {
       let showMoreButton
-      if(this.state.query) {
+      if(this.state.query && this.state.page < this.state.pages) {
             showMoreButton = <button
-                onClick={this.handleShowMore} 
-                style={showMoreButtonStyle} 
+                onClick={this.handleShowMore}
+                style={showMoreButtonStyle}
                 className="showMoreButton" >
                     Show more
             </button>

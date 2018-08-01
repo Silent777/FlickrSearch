@@ -29,6 +29,6 @@ body {
 
 .showMoreButton:active {
   background-color: #3e8e41;
-  box-shadow: 0 5px #666;
+  box-shadow: 0 5px #666 !important;
   transform: translateY(4px);
 }
